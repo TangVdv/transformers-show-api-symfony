@@ -3,3 +3,15 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
+
+entities:
+    resource:
+        path: ../src/Entity
+        namespace: App\Entity
+    type: attribute
+
+repositories:
+    resource:
+        path: ../src/Repository
+        namespace: App\Repository
+    type: attribute
