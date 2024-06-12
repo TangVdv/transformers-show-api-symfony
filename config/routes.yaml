@@ -15,3 +15,9 @@ repositories:
         path: ../src/Repository
         namespace: App\Repository
     type: attribute
+
+normalizers:
+    resource:
+        path: ../src/Normalizer
+        namespace: App\Normalizer
+    type: attribute
