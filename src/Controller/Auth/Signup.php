@@ -6,9 +6,11 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\User;
+use App\Entity\UserAuth;
 use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactory;
 use Symfony\Component\Uid\Uuid;
 use Doctrine\ORM\EntityManagerInterface;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 
 class Signup extends AuthController
 {
@@ -51,6 +53,13 @@ class Signup extends AuthController
         $user->setPassword($passwordHasher->hash($params["password"]));
 
         $entityManager->persist($user);
+        $entityManager->flush();
+
+        $auth = new UserAuth();
+        $auth->setAccessToken($this->userAuthRepository->generateToken());
+        $auth->setUserId($user->getId());
+
+        $entityManager->persist($auth);
         $entityManager->flush();
 
         $json = $this->serializer->serialize($user, 'json');
