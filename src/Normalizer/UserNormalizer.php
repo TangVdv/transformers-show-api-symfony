@@ -3,15 +3,20 @@
 namespace App\Normalizer;
 
 use App\Entity\User;
+use App\Normalizer\UserAuthNormalizer;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class UserNormalizer implements NormalizerInterface
 {
+    protected UserAuthNormalizer $userAuthNormalizer;
 
+    public function __construct(UserAuthNormalizer $normalizer){
+        $this->userAuthNormalizer = $normalizer;
+    }
 
     public function normalize(mixed $object, ?string $format = null, array $context = []): array
     {        
-        return [
+        $json = [
             "id" => $object->getId(),
             "uuid" => $object->getUuid(),
             "username" => $object->getUsername(),
@@ -20,6 +25,12 @@ class UserNormalizer implements NormalizerInterface
             "created_at" => $object->getCreatedAt(),
             "updated_at" => $object->getUpdatedAt()
         ];
+
+        if($object->getUserAuth()){
+            $json["token"] = $this->userAuthNormalizer->normalize($object->getUserAuth());
+        }
+
+        return $json;
     }
 
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []):bool
