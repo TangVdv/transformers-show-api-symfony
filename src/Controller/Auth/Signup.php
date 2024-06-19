@@ -7,10 +7,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\User;
 use App\Entity\UserAuth;
-use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactory;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Uid\Uuid;
 use Doctrine\ORM\EntityManagerInterface;
-use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 
 class Signup extends AuthController
 {
@@ -19,7 +18,7 @@ class Signup extends AuthController
         name: 'signup',
         methods: ['POST']
     )]
-    public function __invoke(Request $request, EntityManagerInterface $entityManager): Response
+    public function __invoke(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
         $params = [
             "username" => preg_replace('/\s+/','', $request->get("username")),
@@ -37,30 +36,25 @@ class Signup extends AuthController
             return new Response("This user already exist");
         }
 
-        $factory = new PasswordHasherFactory([
-            'common' => ['algorithm' => 'bcrypt'],
-            'memory-hard' => ['algorithm' => 'sodium'],
-        ]);
-
-        $passwordHasher = $factory->getPasswordHasher('common');
-
         $uuid = Uuid::v7();
 
         $user = new User();
-        $user->setUuid($uuid);
-        $user->setUsername($params["username"]);
-        $user->setEmail($params["email"]);
-        $user->setPassword($passwordHasher->hash($params["password"]));
+        $user->setUuid($uuid)
+            ->setUsername($params["username"])
+            ->setEmail($params["email"])
+            ->setPlainPassword($params["password"]);
 
         $entityManager->persist($user);
         $entityManager->flush();
 
         $auth = new UserAuth();
-        $auth->setAccessToken($this->userAuthRepository->generateToken());
-        $auth->setUserId($user->getId());
+        $auth->setAccessToken($this->userAuthRepository->generateToken())
+            ->setUserId($user->getId());
 
         $entityManager->persist($auth);
         $entityManager->flush();
+
+        $user->setUserAuth($auth);
 
         $json = $this->serializer->serialize($user, 'json');
         return new Response($json, 200, ['Content-Type', 'application/json']);
