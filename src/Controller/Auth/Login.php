@@ -6,7 +6,6 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Doctrine\ORM\EntityManagerInterface;
 
 class Login extends AuthController
 {
@@ -15,7 +14,7 @@ class Login extends AuthController
         name: 'login',
         methods: ['POST']
     )]
-    public function __invoke(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
+    public function __invoke(Request $request, UserPasswordHasherInterface $passwordHasher): Response
     {
         $params = [
             "email" => preg_replace('/\s+/','', $request->get("email")),

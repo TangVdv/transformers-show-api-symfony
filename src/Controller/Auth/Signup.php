@@ -7,7 +7,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\User;
 use App\Entity\UserAuth;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Uid\Uuid;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -18,7 +17,7 @@ class Signup extends AuthController
         name: 'signup',
         methods: ['POST']
     )]
-    public function __invoke(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
+    public function __invoke(Request $request, EntityManagerInterface $entityManager): Response
     {
         $params = [
             "username" => preg_replace('/\s+/','', $request->get("username")),

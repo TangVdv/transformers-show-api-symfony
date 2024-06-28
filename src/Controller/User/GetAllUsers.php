@@ -4,6 +4,8 @@ namespace App\Controller\User;
 
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+use App\Component\AuthVerification;
 
 class GetAllUsers extends UserController
 {
@@ -12,8 +14,12 @@ class GetAllUsers extends UserController
         name: 'users',
         methods: ['GET']
     )]
-    public function __invoke(): Response
+    public function __invoke(Request $request, AuthVerification $authVerification): Response
     {
+        if(!$authVerification->verify($request->headers->get('Authorization'))){
+            return $authVerification->getUnauthorizedResponse();
+        }
+
         $users = $this->userRepository->findAll();
         
         if($users){
