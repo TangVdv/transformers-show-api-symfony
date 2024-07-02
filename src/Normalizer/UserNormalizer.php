@@ -7,19 +7,19 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class UserNormalizer implements NormalizerInterface
 {
-
-
     public function normalize(mixed $object, ?string $format = null, array $context = []): array
     {        
-        return [
+        $json = [
             "id" => $object->getId(),
             "uuid" => $object->getUuid(),
-            "username" => $object->getUsername(),
+            "username" => $object->getFullName(),
             "email" => $object->getEmail(),
             "email_verified" => $object->getEmailVerified(),
             "created_at" => $object->getCreatedAt(),
             "updated_at" => $object->getUpdatedAt()
         ];
+
+        return $json;
     }
 
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []):bool

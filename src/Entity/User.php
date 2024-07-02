@@ -5,50 +5,74 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
+#[UniqueEntity('email')]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-class User
+#[ORM\EntityListeners(['App\EntityListener\UserListener'])]
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    
-    #[ORM\Column(length: 100)]
+    #[ORM\Column(type: 'string', length: 100, unique: true)]
+    #[Assert\NotBlank()]
     private ?string $uuid = null;
 
-    
-    #[ORM\Column(length: 16)]
+
+    #[ORM\Column(type: 'string', length: 16, nullable: true)]
+    #[Assert\NotBlank()]
+    #[Assert\Length(min: 2, max: 16)]
     private ?string $username = null;
 
-    
-    #[ORM\Column(length: 255)]
+
+    #[ORM\Column(type: 'string', length: 255, unique: true)]
+    #[Assert\Email()]
+    #[Assert\Length(min: 2, max: 255)]
     private ?string $email = null;
 
+    #[ORM\Column(type: 'json')]
+    private array $roles = [];
 
-    #[ORM\Column(length: 255)]
+    private ?string $plainPassword = null;
+
+    #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank()]
+    #[Assert\Length(min: 2, max: 255)]
     private ?string $password = null;
 
-    
+
     #[ORM\Column(type: Types::SMALLINT)]
+    #[Assert\NotNull()]
     private ?int $email_verified = null;
 
-    
+
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
+    #[Assert\NotNull()]
     private ?\DateTimeImmutable $created_at = null;
 
-    
+
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
+    #[Assert\NotNull()]
     private ?\DateTimeImmutable $updated_at = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: 'integer')]
+    #[Assert\NotNull()]
     private ?int $current_request = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: 'integer')]
+    #[Assert\NotNull()]
     private ?int $max_request = null;
 
-    public function __construct(){
+    private ?UserAuth $auth = null;
+
+    public function __construct()
+    {
         $this->email_verified = 0;
         $this->created_at = new \DateTimeImmutable();
         $this->updated_at = new \DateTimeImmutable();
@@ -73,7 +97,7 @@ class User
         return $this;
     }
 
-    public function getUsername(): ?string
+    public function getFullName(): ?string
     {
         return $this->username;
     }
@@ -97,9 +121,14 @@ class User
         return $this;
     }
 
-    public function setPassword(string $password): static
+    public function getPlainPassword()
     {
-        $this->password = $password;
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword($plainPassword)
+    {
+        $this->plainPassword = $plainPassword;
 
         return $this;
     }
@@ -162,5 +191,69 @@ class User
         $this->max_request = $max_request;
 
         return $this;
+    }
+
+    public function getUserAuth(): ?UserAuth
+    {
+        return $this->auth;
+    }
+
+    public function setUserAuth(UserAuth $auth): static
+    {
+        $this->auth = $auth;
+
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials(): void
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
+    }
+
+    /**
+     * The public representation of the user (e.g. a username, an email address, etc.)
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->email;
     }
 }
