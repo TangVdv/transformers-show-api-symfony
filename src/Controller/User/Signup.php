@@ -1,16 +1,15 @@
 <?php
-// src/Controller/Auth/Signup.php
-namespace App\Controller\Auth;
+// src/Controller/User/Signup.php
+namespace App\Controller\User;
 
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\User;
-use App\Entity\UserAuth;
 use Symfony\Component\Uid\Uuid;
 use Doctrine\ORM\EntityManagerInterface;
 
-class Signup extends AuthController
+class Signup extends UserController
 {
     #[Route(
         '/auth/signup',
@@ -45,15 +44,6 @@ class Signup extends AuthController
 
         $entityManager->persist($user);
         $entityManager->flush();
-
-        $auth = new UserAuth();
-        $auth->setAccessToken($this->userAuthRepository->generateToken())
-            ->setUserId($user->getId());
-
-        $entityManager->persist($auth);
-        $entityManager->flush();
-
-        $user->setUserAuth($auth);
 
         $json = $this->serializer->serialize($user, 'json');
         return new Response($json, 200, ['Content-Type', 'application/json']);

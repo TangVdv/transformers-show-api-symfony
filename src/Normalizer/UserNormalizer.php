@@ -19,7 +19,7 @@ class UserNormalizer implements NormalizerInterface
         $json = [
             "id" => $object->getId(),
             "uuid" => $object->getUuid(),
-            "username" => $object->getUsername(),
+            "username" => $object->getFullName(),
             "email" => $object->getEmail(),
             "email_verified" => $object->getEmailVerified(),
             "created_at" => $object->getCreatedAt(),

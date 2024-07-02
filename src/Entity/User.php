@@ -36,6 +36,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\Length(min: 2, max: 255)]
     private ?string $email = null;
 
+    #[ORM\Column(type: 'json')]
+    private array $roles = [];
+
     private ?string $plainPassword = null;
 
     #[ORM\Column(type: 'string', length: 255)]
@@ -66,8 +69,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotNull()]
     private ?int $max_request = null;
 
-    private array $roles = [];
-
     private ?UserAuth $auth = null;
 
     public function __construct()
@@ -96,7 +97,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getUsername(): ?string
+    public function getFullName(): ?string
     {
         return $this->username;
     }
