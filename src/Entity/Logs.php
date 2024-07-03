@@ -27,10 +27,6 @@ class Logs
     #[Assert\NotNull()]
     private ?\DateTimeImmutable $request_at = null;
 
-    #[ORM\Column(type: 'string', length: 50)]
-    #[Assert\NotBlank()]
-    private ?string $location = null;
-
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\NotBlank()]
     private ?string $userAgent = null;
@@ -83,18 +79,6 @@ class Logs
     public function setRequestAt(\DateTimeImmutable $request_at): static
     {
         $this->request_at = $request_at;
-
-        return $this;
-    }
-
-    public function getLocation(): ?string
-    {
-        return $this->location;
-    }
-
-    public function setLocation(string $location): static
-    {
-        $this->location = $location;
 
         return $this;
     }
