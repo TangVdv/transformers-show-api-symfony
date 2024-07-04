@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 class GetAllUsers extends UserController
 {
     #[Route(
-        '/users',
+        '/api/users',
         name: 'users',
         methods: ['GET']
     )]
