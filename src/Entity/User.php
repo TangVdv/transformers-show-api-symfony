@@ -61,23 +61,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotNull()]
     private ?\DateTimeImmutable $updated_at = null;
 
-    #[ORM\Column(type: 'integer')]
-    #[Assert\NotNull()]
-    private ?int $current_request = null;
-
-    #[ORM\Column(type: 'integer')]
-    #[Assert\NotNull()]
-    private ?int $max_request = null;
-
-    private ?UserAuth $auth = null;
-
     public function __construct()
     {
         $this->email_verified = 0;
         $this->created_at = new \DateTimeImmutable();
         $this->updated_at = new \DateTimeImmutable();
-        $this->current_request = 0;
-        $this->max_request = 0;
     }
 
     public function getId(): ?int
@@ -165,42 +153,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setUpdatedAt(\DateTimeImmutable $updated_at): static
     {
         $this->updated_at = $updated_at;
-
-        return $this;
-    }
-
-    public function getCurrentRequest(): ?int
-    {
-        return $this->current_request;
-    }
-
-    public function setCurrentRequest(int $current_request): static
-    {
-        $this->current_request = $current_request;
-
-        return $this;
-    }
-
-    public function getMaxRequest(): ?int
-    {
-        return $this->max_request;
-    }
-
-    public function setMaxRequest(int $max_request): static
-    {
-        $this->max_request = $max_request;
-
-        return $this;
-    }
-
-    public function getUserAuth(): ?UserAuth
-    {
-        return $this->auth;
-    }
-
-    public function setUserAuth(UserAuth $auth): static
-    {
-        $this->auth = $auth;
 
         return $this;
     }
