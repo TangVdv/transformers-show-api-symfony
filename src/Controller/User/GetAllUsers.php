@@ -4,6 +4,7 @@ namespace App\Controller\User;
 
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class GetAllUsers extends UserController
 {
@@ -12,6 +13,7 @@ class GetAllUsers extends UserController
         name: 'users',
         methods: ['GET']
     )]
+    #[IsGranted('ROLE_ADMIN', statusCode: 403, message: 'Forbidden')]
     public function __invoke(): Response
     {
         $users = $this->userRepository->findAll();

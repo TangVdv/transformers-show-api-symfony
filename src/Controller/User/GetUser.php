@@ -4,6 +4,8 @@ namespace App\Controller\User;
 
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Response;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class GetUser extends UserController
 {
@@ -12,9 +14,11 @@ class GetUser extends UserController
         name: 'user',
         methods: ['GET']
     )]
-    public function __invoke(int $id): Response
+    public function __invoke(int $id, TokenStorageInterface $tokenStorageInterface, JWTTokenManagerInterface $jwtManager): Response
     {
-        $user = $this->userRepository->find($id);
+        $decodedJwtToken = $jwtManager->decode($tokenStorageInterface->getToken());
+        
+        $user = $this->userRepository->findOneBy(array("email" => $decodedJwtToken["username"], "id" => $id));
 
         if($user){
             $json = $this->serializer->serialize($user, 'json');
@@ -23,9 +27,9 @@ class GetUser extends UserController
         else{
             return new Response(json_encode([
                 "Error" => [
-                    "code" => 404,
-                    "message" => "Couldn't find any data."
-                ]]), 404, ['Content-Type', 'application/json']
+                    "code" => 401,
+                    "message" => "Unauthorized"
+                ]]), 401, ['Content-Type', 'application/json']
             );
         }
     }
