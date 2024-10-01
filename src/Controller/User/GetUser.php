@@ -4,8 +4,7 @@ namespace App\Controller\User;
 
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Response;
-use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class GetUser extends UserController
 {
@@ -14,11 +13,10 @@ class GetUser extends UserController
         name: 'user',
         methods: ['GET']
     )]
-    public function __invoke(int $id, TokenStorageInterface $tokenStorageInterface, JWTTokenManagerInterface $jwtManager): Response
+    #[IsGranted('ROLE_ADMIN', statusCode: 403, message: 'Forbidden')]
+    public function __invoke(int $id): Response
     {
-        $decodedJwtToken = $jwtManager->decode($tokenStorageInterface->getToken());
-        
-        $user = $this->userRepository->findOneBy(array("email" => $decodedJwtToken["username"], "id" => $id));
+        $user = $this->userRepository->findOneBy(array("id" => $id));
 
         if($user){
             $json = $this->serializer->serialize($user, 'json');
