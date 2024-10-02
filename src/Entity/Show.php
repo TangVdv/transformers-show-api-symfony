@@ -5,7 +5,6 @@ namespace App\Entity;
 use App\Repository\ShowRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Uid\Uuid;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -19,9 +18,9 @@ class Show
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'uuid')]
+    #[ORM\Column(type: 'string')]
     #[Assert\NotBlank()]
-    private ?Uuid $uuid = null;
+    private ?string $uuid = null;
 
     #[ORM\Column(type: 'string', length: 50, unique: true)]
     #[Assert\NotBlank()]
@@ -72,12 +71,12 @@ class Show
         return $this;
     }
 
-    public function getUuid(): ?Uuid
+    public function getUuid(): ?string
     {
         return $this->uuid;
     }
 
-    public function setUuid(Uuid $uuid): static
+    public function setUuid(string $uuid): static
     {
         $this->uuid = $uuid;
 
