@@ -6,17 +6,18 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Show;
-use DateTimeImmutable;
 use Symfony\Component\Uid\Uuid;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class CreateShow extends ShowController
 {
     #[Route(
         '/api/show',
-        name: 'create show',
+        name: 'create_show',
         methods: ['POST']
     )]
+    #[IsGranted('ROLE_ADMIN', statusCode: 403, message: 'Forbidden')]
     public function __invoke(Request $request, EntityManagerInterface $entityManager): Response
     {
         $payload = $request->getPayload();
@@ -94,7 +95,7 @@ class CreateShow extends ShowController
         $show->setUuid($uuid)
             ->setShowName($params["name"]["value"])
             ->setDescription($params["description"]["value"])
-            ->setReleaseDate(new DateTimeImmutable($params["release_date"]["value"]))
+            ->setReleaseDate($params["release_date"]["value"])
             ->setImage($params["image"]["value"])
             ->setRunningTime($params["running_time"]["value"])
             ->setBudget($params["budget"]["value"])

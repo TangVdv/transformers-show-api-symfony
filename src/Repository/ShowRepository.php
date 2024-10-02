@@ -19,4 +19,14 @@ class ShowRepository extends ServiceEntityRepository
         parent::__construct($registry, Show::class);
         $this->entityManager = $entityManager;
     }
+
+    public function findByName(string $value): mixed
+    {
+        return $this->createQueryBuilder('s')
+            ->where('s.show_name LIKE :val')
+            ->setParameter('val', '%'.$value.'%')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }
