@@ -18,10 +18,12 @@ class Signup extends UserController
     )]
     public function __invoke(Request $request, EntityManagerInterface $entityManager): Response
     {
+        $payload = $request->getPayload();
+
         $params = [
-            "username" => preg_replace('/\s+/','', $request->get("username")),
-            "email" => preg_replace('/\s+/','', $request->get("email")),
-            "password" => preg_replace('/\s+/','', $request->get("password")),
+            "username" => preg_replace('/\s+/','', $payload->get("username")),
+            "email" => preg_replace('/\s+/','', $payload->get("email")),
+            "password" => preg_replace('/\s+/','', $payload->get("password")),
         ];
 
         foreach($params as $key => $value){

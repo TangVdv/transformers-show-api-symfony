@@ -6,7 +6,6 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Show;
-use Symfony\Component\Uid\Uuid;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -89,11 +88,8 @@ class CreateShow extends ShowController
             return new Response("This show already exist");
         }
 
-        $uuid = Uuid::v7();
-
         $show = new Show();
-        $show->setUuid($uuid)
-            ->setShowName($params["name"]["value"])
+        $show->setShowName($params["name"]["value"])
             ->setDescription($params["description"]["value"])
             ->setReleaseDate($params["release_date"]["value"])
             ->setImage($params["image"]["value"])
