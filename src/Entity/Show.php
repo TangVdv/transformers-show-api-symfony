@@ -19,10 +19,6 @@ class Show
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'string')]
-    #[Assert\NotBlank()]
-    private ?string $uuid = null;
-
     #[ORM\Column(type: 'string', length: 50, unique: true)]
     #[Assert\NotBlank()]
     #[Assert\Length(min: 2, max: 50)]
@@ -60,12 +56,6 @@ class Show
     private ?string $writer = null;
     private ?string $composer = null;
 
-    private ?array $bot = null;
-    private ?array $human = null;
-    private ?array $concept_art = null;
-    private ?array $voice_line = null;
-    private ?array $artefact = null;
-
     public function __construct()
     {
         $this->type = 0;
@@ -79,18 +69,6 @@ class Show
     public function setId(int $id): static
     {
         $this->id = $id;
-
-        return $this;
-    }
-
-    public function getUuid(): ?string
-    {
-        return $this->uuid;
-    }
-
-    public function setUuid(string $uuid): static
-    {
-        $this->uuid = $uuid;
 
         return $this;
     }
@@ -235,66 +213,6 @@ class Show
     public function setComposer(string $composer): static
     {
         $this->composer = $composer;
-
-        return $this;
-    }
-
-    public function getBot(): ?array
-    {
-        return $this->bot;
-    }
-
-    public function setBot(array $bot): static
-    {
-        $this->bot = $bot;
-
-        return $this;
-    }
-
-    public function getHuman(): ?array
-    {
-        return $this->human;
-    }
-
-    public function setHuman(array $human): static
-    {
-        $this->human = $human;
-
-        return $this;
-    }
-
-    public function getConceptArt(): ?array
-    {
-        return $this->concept_art;
-    }
-
-    public function setConceptArt(array $concept_art): static
-    {
-        $this->concept_art = $concept_art;
-
-        return $this;
-    }
-
-    public function getVoiceLine(): ?array
-    {
-        return $this->voice_line;
-    }
-
-    public function setVoiceLine(array $voice_line): static
-    {
-        $this->voice_line = $voice_line;
-
-        return $this;
-    }
-
-    public function getArtefact(): ?array
-    {
-        return $this->artefact;
-    }
-
-    public function setArtefact(array $artefact): static
-    {
-        $this->artefact = $artefact;
 
         return $this;
     }
