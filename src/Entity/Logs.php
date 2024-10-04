@@ -8,6 +8,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\DBAL\Types\Types;
 
 #[ORM\Entity(repositoryClass: LogsRepository::class)]
+#[ORM\Table(name: '`logs`')]
 class Logs
 {
     #[ORM\Id]

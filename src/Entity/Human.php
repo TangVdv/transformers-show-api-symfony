@@ -2,14 +2,14 @@
 
 namespace App\Entity;
 
-use App\Repository\ArtefactRepository;
+use App\Repository\HumanRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ArtefactRepository::class)]
-#[ORM\Table(name: '`artefact`')]
-class Artefact
+#[ORM\Entity(repositoryClass: HumanRepository::class)]
+#[ORM\Table(name: '`human`')]
+class Human
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -18,13 +18,17 @@ class Artefact
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Entity $Entity = null;
+    private ?Entity $entity = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Actor $actor = null;
 
     /**
      * @var Collection<int, ScreenTime>
      */
-    #[ORM\ManyToMany(targetEntity: ScreenTime::class, mappedBy: "artefacts")]
-    private ?Collection $screen_times;
+    #[ORM\ManyToMany(targetEntity: ScreenTime::class, mappedBy: "humans")]
+    private Collection $screen_times;
 
     public function __construct()
     {
@@ -45,12 +49,24 @@ class Artefact
 
     public function getEntity(): ?Entity
     {
-        return $this->Entity;
+        return $this->entity;
     }
 
-    public function setEntity(?Entity $Entity): static
+    public function setEntity(?Entity $entity): static
     {
-        $this->Entity = $Entity;
+        $this->entity = $entity;
+
+        return $this;
+    }
+
+    public function getActor(): ?Actor
+    {
+        return $this->actor;
+    }
+
+    public function setActor(?Actor $actor): static
+    {
+        $this->actor = $actor;
 
         return $this;
     }
@@ -67,7 +83,7 @@ class Artefact
     {
         if (!$this->screen_times->contains($screenTime)) {
             $this->screen_times->add($screenTime);
-            $screenTime->addArtefact($this);
+            $screenTime->addHuman($this);
         }
 
         return $this;

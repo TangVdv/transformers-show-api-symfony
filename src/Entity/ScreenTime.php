@@ -6,6 +6,7 @@ use App\Repository\ScreenTimeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ScreenTimeRepository::class)]
 #[ORM\Table(name: '`screen_time`')]
@@ -13,19 +14,24 @@ class ScreenTime
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type: 'integer')]
+    #[Assert\NotNull()]
     private ?int $id = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: 'integer')]
+    #[Assert\NotNull()]
     private ?int $hour = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: 'integer')]
+    #[Assert\NotNull()]
     private ?int $minute = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: 'integer')]
+    #[Assert\NotNull()]
     private ?int $second = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: 'integer')]
+    #[Assert\NotNull()]
     private ?int $total = null;
 
     #[ORM\ManyToOne]
@@ -36,12 +42,20 @@ class ScreenTime
      * @var Collection<int, Artefact>
      */
     #[ORM\ManyToMany(targetEntity: Artefact::class, inversedBy: "screen_times")]
-    #[ORM\JoinTable(name: "artefact_screen_time")]
+    #[ORM\JoinTable(name: "screen_time_artefact")]
     private Collection $artefacts;
+
+    /**
+     * @var Collection<int, Human>
+     */
+    #[ORM\ManyToMany(targetEntity: Human::class, inversedBy: "screen_times")]
+    #[ORM\JoinTable(name: "screen_time_human")]
+    private Collection $humans;
 
     public function __construct()
     {
         $this->artefacts = new ArrayCollection();
+        $this->humans = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -136,6 +150,31 @@ class ScreenTime
     public function removeArtefact(Artefact $artefact): static
     {
         $this->artefacts->removeElement($artefact);
+
+        return $this;
+    }
+
+
+    /**
+     * @return Collection<int, Human>
+     */
+    public function getHumans(): Collection
+    {
+        return $this->humans;
+    }
+
+    public function addHuman(Human $human): static
+    {
+        if (!$this->humans->contains($human)) {
+            $this->humans->add($human);
+        }
+
+        return $this;
+    }
+
+    public function removeHuman(Human $human): static
+    {
+        $this->humans->removeElement($human);
 
         return $this;
     }
