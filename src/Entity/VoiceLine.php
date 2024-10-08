@@ -59,7 +59,7 @@ class VoiceLine
         return $this->number;
     }
 
-    public function setNumber(?int $number): static
+    public function setNumber(int $number): static
     {
         $this->number = $number;
 
@@ -71,7 +71,7 @@ class VoiceLine
         return $this->entity;
     }
 
-    public function setEntity(?Entity $entity): static
+    public function setEntity(Entity $entity): static
     {
         $this->entity = $entity;
 
@@ -83,7 +83,7 @@ class VoiceLine
         return $this->show;
     }
 
-    public function setShow(?Show $show): static
+    public function setShow(Show $show): static
     {
         $this->show = $show;
 

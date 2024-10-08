@@ -191,7 +191,7 @@ class Bot
         return $this->alts;
     }
 
-    public function addAlt(?Alt $alt): static
+    public function addAlt(Alt $alt): static
     {
         if (!$this->alts->contains($alt)) {
             $this->alts->add($alt);
@@ -200,7 +200,7 @@ class Bot
         return $this;
     }
 
-    public function removeAlt(?Alt $alt): static
+    public function removeAlt(Alt $alt): static
     {
         $this->alts->removeElement($alt);
 
@@ -216,7 +216,7 @@ class Bot
         return $this->voice_actors;
     }
 
-    public function addVoiceActor(?VoiceActor $voice_actor): static
+    public function addVoiceActor(VoiceActor $voice_actor): static
     {
         if (!$this->voice_actors->contains($voice_actor)) {
             $this->voice_actors->add($voice_actor);
@@ -226,7 +226,7 @@ class Bot
         return $this;
     }
 
-    public function removeVoiceActor(?VoiceActor $voice_actor): static
+    public function removeVoiceActor(VoiceActor $voice_actor): static
     {
         $this->voice_actors->removeElement($voice_actor);
 

@@ -49,7 +49,7 @@ class Belonging
         return $this->bot;
     }
 
-    public function setBot(?Bot $bot): static
+    public function setBot(Bot $bot): static
     {
         $this->bot = $bot;
 
@@ -61,7 +61,7 @@ class Belonging
         return $this->faction;
     }
 
-    public function setFaction(?Faction $faction): static
+    public function setFaction(Faction $faction): static
     {
         $this->faction = $faction;
 

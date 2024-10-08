@@ -8,6 +8,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use DateTimeImmutable;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 #[UniqueEntity('show_name')]
 #[ORM\Entity(repositoryClass: ShowRepository::class)]
@@ -51,14 +53,29 @@ class Show
     #[Assert\NotNull()]
     private ?int $box_office = null;
 
-    private ?string $director = null;
-    private ?array $producer = null;
-    private ?string $writer = null;
-    private ?string $composer = null;
+    #[ORM\ManyToMany(targetEntity: Creator::class, mappedBy: "shows")]
+    private ?Collection $creators = null;
+
+    #[ORM\OneToMany(targetEntity: ScreenTime::class, mappedBy: "show")]
+    private ?Collection $screen_times = null;
+
+    #[ORM\OneToMany(targetEntity: ConceptArt::class, mappedBy: "show")]
+    private ?Collection $concept_arts = null;
+
+    #[ORM\OneToMany(targetEntity: VoiceLine::class, mappedBy: "show")]
+    private ?Collection $voice_lines = null;
+
+    private ?Collection $artefacts = null;
+    private ?Collection $humans = null;
+    private ?Collection $bots = null;
 
     public function __construct()
     {
         $this->type = 0;
+        $this->creators = new ArrayCollection();
+        $this->screen_times  = new ArrayCollection();
+        $this->concept_arts  = new ArrayCollection();
+        $this->voice_lines  = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -169,51 +186,109 @@ class Show
         return $this;
     }
 
-    public function getDirector(): ?string
+    /**
+     * @return Collection<int, Creator>
+     */
+    public function getCreators(): ?Collection
     {
-        return $this->director;
+        return $this->creators;
     }
 
-    public function setDirector(string $director): static
+    public function addCreator(Creator $creator): static
     {
-        $this->director = $director;
+        if (!$this->creators->contains($creator)) {
+            $this->creators->add($creator);
+            $creator->addShow($this);
+        }
 
         return $this;
     }
 
-    public function getProducer(): ?array
+    public function removeCreator(Creator $creator): static
     {
-        return $this->producer;
-    }
-
-    public function setProducer(array $producer): static
-    {
-        $this->producer = $producer;
+        $this->creators->removeElement($creator);
 
         return $this;
     }
 
-    public function getWriter(): ?string
+    public function getScreenTimes(): ?Collection
     {
-        return $this->writer;
+        return $this->screen_times;
     }
 
-    public function setWriter(string $writer): static
+    public function getArtefacts(): ?Collection
     {
-        $this->writer = $writer;
+        $this->artefacts  = new ArrayCollection();
+
+        foreach($this->screen_times as $screen_time){
+            foreach($screen_time->getArtefacts() as $artefact){
+                $this->addArtefact($artefact);
+            }
+        } 
+
+        return $this->artefacts;
+    }
+
+    public function addArtefact(Artefact $artefact): static
+    {
+        if (!$this->artefacts->contains($artefact)) {
+            $this->artefacts->add($artefact);
+        }
 
         return $this;
     }
 
-    public function getComposer(): ?string
+    public function getHumans(): ?Collection
     {
-        return $this->composer;
+        $this->humans  = new ArrayCollection();
+
+        foreach($this->screen_times as $screen_time){
+            foreach($screen_time->getHumans() as $human){
+                $this->addHuman($human);
+            }
+        } 
+
+        return $this->humans;
     }
 
-    public function setComposer(string $composer): static
+    public function addHuman(Human $human): static
     {
-        $this->composer = $composer;
+        if (!$this->humans->contains($human)) {
+            $this->humans->add($human);
+        }
 
         return $this;
+    }
+
+    public function getBots(): ?Collection
+    {
+        $this->bots  = new ArrayCollection();
+
+        foreach($this->screen_times as $screen_time){
+            foreach($screen_time->getBots() as $bot){
+                $this->addBot($bot);
+            }
+        } 
+
+        return $this->bots;
+    }
+
+    public function addBot(Bot $bot): static
+    {
+        if (!$this->bots->contains($bot)) {
+            $this->bots->add($bot);
+        }
+
+        return $this;
+    }
+
+    public function getConceptArts(): ?Collection
+    {
+        return $this->concept_arts;
+    }
+
+    public function getVoiceLines(): ?Collection
+    {
+        return $this->voice_lines;
     }
 }

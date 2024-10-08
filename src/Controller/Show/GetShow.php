@@ -4,6 +4,8 @@ namespace App\Controller\Show;
 
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Serializer\Serializer;
+use App\Normalizer\ShowNormalizer;
 
 class GetShow extends ShowController
 {
@@ -15,7 +17,7 @@ class GetShow extends ShowController
     )]
     public function getShowByID(int $id): Response
     {
-        $show = $this->showRepository->findOneBy(array("id" => $id));
+        $show = $this->showRepository->findById($id);
         return $this->response($show);
     }
 
@@ -28,14 +30,17 @@ class GetShow extends ShowController
     public function getShowByName(string $name): Response
     {
         $show = $this->showRepository->findByName($name);
-
         return $this->response($show);
     }
 
     private function response(mixed $show): Response
     {
         if($show){
-            $json = $this->serializer->serialize($show, "json");
+            $serializer = new Serializer([new ShowNormalizer]);
+            $data = $serializer->normalize([
+                "show" => $show
+            ], "json");
+            $json = $this->serializer->serialize($data, "json");
             return new Response($json, 200, ['Content-Type', 'application/json']);
         }
         else{

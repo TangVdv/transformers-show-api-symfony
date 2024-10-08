@@ -23,9 +23,73 @@ class ShowRepository extends ServiceEntityRepository
     public function findByName(string $value): mixed
     {
         return $this->createQueryBuilder('s')
+            // CREATORS
+            ->leftJoin('s.creators', 'c')
+            ->addSelect('c')
+
+            // SCREEN TIME
+            ->innerJoin('s.screen_times', 'st')
+            ->addSelect('st')
+
+            // ARTEFACT
+            ->leftJoin('st.artefacts', 'a')
+            ->addSelect('a')
+
+            // HUMAN
+            ->leftJoin('st.humans', 'h')
+            ->addSelect('h')
+
+            // BOT
+            ->leftJoin('st.bots', 'b')
+            ->addSelect('b')
+
+            // CONCEPT ART
+            ->leftJoin('s.concept_arts', 'ca')
+            ->addSelect('ca')
+            
+            // VOICE LINE
+            ->leftJoin('s.voice_lines', 'vl')
+            ->addSelect('vl')
+        
             ->where('s.show_name LIKE :val')
             ->setParameter('val', '%'.$value.'%')
-            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    public function findById($value)
+    {
+        return $this->createQueryBuilder('s')
+            // CREATORS
+            ->leftJoin('s.creators', 'c')
+            ->addSelect('c')
+
+            // SCREEN TIME
+            ->innerJoin('s.screen_times', 'st')
+            ->addSelect('st')
+
+            // ARTEFACT
+            ->leftJoin('st.artefacts', 'a')
+            ->addSelect('a')
+
+            // HUMAN
+            ->leftJoin('st.humans', 'h')
+            ->addSelect('h')
+
+            // BOT
+            ->leftJoin('st.bots', 'b')
+            ->addSelect('b')
+
+            // CONCEPT ART
+            ->leftJoin('s.concept_arts', 'ca')
+            ->addSelect('ca')
+            
+            // VOICE LINE
+            ->leftJoin('s.voice_lines', 'vl')
+            ->addSelect('vl')
+
+            ->where('s.id = :val')
+            ->setParameter('val', $value)
             ->getQuery()
             ->getOneOrNullResult();
     }

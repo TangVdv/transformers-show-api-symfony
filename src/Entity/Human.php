@@ -52,7 +52,7 @@ class Human
         return $this->entity;
     }
 
-    public function setEntity(?Entity $entity): static
+    public function setEntity(Entity $entity): static
     {
         $this->entity = $entity;
 
@@ -64,7 +64,7 @@ class Human
         return $this->actor;
     }
 
-    public function setActor(?Actor $actor): static
+    public function setActor(Actor $actor): static
     {
         $this->actor = $actor;
 
@@ -79,7 +79,7 @@ class Human
         return $this->screen_times;
     }
 
-    public function addScreenTime(?ScreenTime $screenTime): static
+    public function addScreenTime(ScreenTime $screenTime): static
     {
         if (!$this->screen_times->contains($screenTime)) {
             $this->screen_times->add($screenTime);
@@ -89,7 +89,7 @@ class Human
         return $this;
     }
 
-    public function removeScreenTime(?ScreenTime $screenTime): static
+    public function removeScreenTime(ScreenTime $screenTime): static
     {
         $this->screen_times->removeElement($screenTime);
 

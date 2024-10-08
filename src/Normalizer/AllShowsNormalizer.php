@@ -18,11 +18,15 @@ class AllShowsNormalizer implements NormalizerInterface
             "running_time" => $object->getRunningTime(),
             "budget" => $object->getBudget(),
             "box_office" => $object->getBoxOffice(),
-            "director_name" => $object->getDirector(),
-            "producer_name" => $object->getProducer(),
-            "writer_name" => $object->getWriter(),
-            "composer_name" => $object->getComposer()
+            "director" => [],
+            "producer" => [],
+            "writer" => [],
+            "composer" => []
         ];
+
+        foreach($object->getCreators() as $creator){
+            array_push($json[$creator->getCategory()], $creator->getCreatorFirstname()." ".$creator->getCreatorLastname());
+        }
 
         return $json;
     }

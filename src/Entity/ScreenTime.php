@@ -52,10 +52,14 @@ class ScreenTime
     #[ORM\JoinTable(name: "screen_time_human")]
     private Collection $humans;
 
+    #[ORM\OneToMany(targetEntity: Bot::class, mappedBy: "screen_time")]
+    private ?Collection $bots = null;
+
     public function __construct()
     {
         $this->artefacts = new ArrayCollection();
         $this->humans = new ArrayCollection();
+        $this->bots = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -123,7 +127,7 @@ class ScreenTime
         return $this->show;
     }
 
-    public function setShow(?Show $show): static
+    public function setShow(Show $show): static
     {
         $this->show = $show;
 
@@ -177,5 +181,13 @@ class ScreenTime
         $this->humans->removeElement($human);
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, Bot>
+     */
+    public function getBots(): Collection
+    {
+        return $this->bots;
     }
 }

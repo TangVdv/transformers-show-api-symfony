@@ -82,7 +82,7 @@ class VoiceActor
         return $this->image;
     }
 
-    public function setImage(?string $image): static
+    public function setImage(string $image): static
     {
         $this->image = $image;
 
@@ -94,7 +94,7 @@ class VoiceActor
         return $this->Nationality;
     }
 
-    public function setNationality(?Nationality $Nationality): static
+    public function setNationality(Nationality $Nationality): static
     {
         $this->Nationality = $Nationality;
 
@@ -109,7 +109,7 @@ class VoiceActor
         return $this->bots;
     }
 
-    public function addBot(?Bot $bot): static
+    public function addBot(Bot $bot): static
     {
         if (!$this->bots->contains($bot)) {
             $this->bots->add($bot);
@@ -118,7 +118,7 @@ class VoiceActor
         return $this;
     }
 
-    public function removeBot(?Bot $bot): static
+    public function removeBot(Bot $bot): static
     {
         $this->bots->removeElement($bot);
 

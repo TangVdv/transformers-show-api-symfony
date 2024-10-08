@@ -100,7 +100,7 @@ class Alt
         return $this->bots;
     }
 
-    public function addBot(?Bot $bot): static
+    public function addBot(Bot $bot): static
     {
         if (!$this->bots->contains($bot)) {
             $this->bots->add($bot);
@@ -110,7 +110,7 @@ class Alt
         return $this;
     }
 
-    public function removeArtefact(?Bot $bot): static
+    public function removeArtefact(Bot $bot): static
     {
         $this->bots->removeElement($bot);
 

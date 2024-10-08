@@ -110,25 +110,4 @@ class Actor
     {
         return $this->humans;
     }
-
-    public function addHuman(?Human $human): static
-    {
-        if (!$this->humans->contains($human)) {
-            $this->humans->add($human);
-            $human->setActor($this);
-        }
-
-        return $this;
-    }
-
-    public function removeHuman(?Human $human): static
-    {
-        if ($this->humans->removeElement($human)) {
-            if ($human->getActor() === $this) {
-                $human->setActor(null);
-            }
-        }
-
-        return $this;
-    }
 }

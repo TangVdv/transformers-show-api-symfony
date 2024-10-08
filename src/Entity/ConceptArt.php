@@ -96,7 +96,7 @@ class ConceptArt
         return $this->note;
     }
 
-    public function setNote(?string $note): static
+    public function setNote(string $note): static
     {
         $this->note = $note;
 
@@ -108,7 +108,7 @@ class ConceptArt
         return $this->srclink;
     }
 
-    public function setSrclink(?string $srclink): static
+    public function setSrclink(string $srclink): static
     {
         $this->srclink = $srclink;
 
@@ -120,7 +120,7 @@ class ConceptArt
         return $this->date;
     }
 
-    public function setDate(?string $date): static
+    public function setDate(string $date): static
     {
         $this->date = new DateTimeImmutable($date);
 
@@ -132,7 +132,7 @@ class ConceptArt
         return $this->entity;
     }
 
-    public function setEntity(?Entity $entity): static
+    public function setEntity(Entity $entity): static
     {
         $this->entity = $entity;
 
@@ -144,7 +144,7 @@ class ConceptArt
         return $this->show;
     }
 
-    public function setShow(?Show $show): static
+    public function setShow(Show $show): static
     {
         $this->show = $show;
 

@@ -63,7 +63,7 @@ class Artefact
         return $this->screen_times;
     }
 
-    public function addScreenTime(?ScreenTime $screenTime): static
+    public function addScreenTime(ScreenTime $screenTime): static
     {
         if (!$this->screen_times->contains($screenTime)) {
             $this->screen_times->add($screenTime);
@@ -73,7 +73,7 @@ class Artefact
         return $this;
     }
 
-    public function removeScreenTime(?ScreenTime $screenTime): static
+    public function removeScreenTime(ScreenTime $screenTime): static
     {
         $this->screen_times->removeElement($screenTime);
 
