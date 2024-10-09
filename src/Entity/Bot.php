@@ -46,7 +46,7 @@ class Bot
     private ?Show $show = null;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?ScreenTime $screen_time = null;
 
     #[ORM\OneToMany(targetEntity: Belonging::class, mappedBy: "bot")]
