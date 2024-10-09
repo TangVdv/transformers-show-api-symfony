@@ -25,7 +25,7 @@ class GetShow extends ShowController
         '/api/show/{name}',
         name: 'get_show_name',
         methods: ['GET'],
-        requirements: ['name' => '\D+']
+        requirements: ['name' => '\w+']
     )]
     public function getShowByName(string $name): Response
     {

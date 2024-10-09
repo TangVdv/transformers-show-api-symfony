@@ -27,20 +27,16 @@ class ShowRepository extends ServiceEntityRepository
             ->leftJoin('s.creators', 'c')
             ->addSelect('c')
 
-            // SCREEN TIME
-            ->innerJoin('s.screen_times', 'st')
-            ->addSelect('st')
-
             // ARTEFACT
-            ->leftJoin('st.artefacts', 'a')
+            ->leftJoin('s.artefacts', 'a')
             ->addSelect('a')
 
             // HUMAN
-            ->leftJoin('st.humans', 'h')
+            ->leftJoin('s.humans', 'h')
             ->addSelect('h')
 
             // BOT
-            ->leftJoin('st.bots', 'b')
+            ->leftJoin('s.bots', 'b')
             ->addSelect('b')
 
             // CONCEPT ART
@@ -53,6 +49,7 @@ class ShowRepository extends ServiceEntityRepository
         
             ->where('s.show_name LIKE :val')
             ->setParameter('val', '%'.$value.'%')
+            ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();
     }
@@ -64,20 +61,16 @@ class ShowRepository extends ServiceEntityRepository
             ->leftJoin('s.creators', 'c')
             ->addSelect('c')
 
-            // SCREEN TIME
-            ->innerJoin('s.screen_times', 'st')
-            ->addSelect('st')
-
             // ARTEFACT
-            ->leftJoin('st.artefacts', 'a')
+            ->leftJoin('s.artefacts', 'a')
             ->addSelect('a')
 
             // HUMAN
-            ->leftJoin('st.humans', 'h')
+            ->leftJoin('s.humans', 'h')
             ->addSelect('h')
 
             // BOT
-            ->leftJoin('st.bots', 'b')
+            ->leftJoin('s.bots', 'b')
             ->addSelect('b')
 
             // CONCEPT ART
@@ -90,6 +83,7 @@ class ShowRepository extends ServiceEntityRepository
 
             ->where('s.id = :val')
             ->setParameter('val', $value)
+            ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();
     }

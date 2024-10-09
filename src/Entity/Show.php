@@ -56,9 +56,6 @@ class Show
     #[ORM\ManyToMany(targetEntity: Creator::class, mappedBy: "shows")]
     private ?Collection $creators = null;
 
-    #[ORM\OneToMany(targetEntity: ScreenTime::class, mappedBy: "show")]
-    private ?Collection $screen_times = null;
-
     #[ORM\OneToMany(targetEntity: ConceptArt::class, mappedBy: "show")]
     private ?Collection $concept_arts = null;
 
@@ -71,17 +68,18 @@ class Show
     #[ORM\OneToMany(targetEntity: Artefact::class, mappedBy: "show")]
     private ?Collection $artefacts = null;
 
+    #[ORM\OneToMany(targetEntity: Bot::class, mappedBy: "show")]
     private ?Collection $bots = null;
 
     public function __construct()
     {
         $this->type = 0;
         $this->creators = new ArrayCollection();
-        $this->screen_times  = new ArrayCollection();
         $this->concept_arts  = new ArrayCollection();
         $this->voice_lines  = new ArrayCollection();
         $this->artefacts = new ArrayCollection();
         $this->humans = new ArrayCollection();
+        $this->bots = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -217,31 +215,9 @@ class Show
         return $this;
     }
 
-    public function getScreenTimes(): ?Collection
-    {
-        return $this->screen_times;
-    }
-
     public function getBots(): ?Collection
     {
-        $this->bots  = new ArrayCollection();
-
-        foreach($this->screen_times as $screen_time){
-            foreach($screen_time->getBots() as $bot){
-                $this->addBot($bot);
-            }
-        } 
-
         return $this->bots;
-    }
-
-    public function addBot(Bot $bot): static
-    {
-        if (!$this->bots->contains($bot)) {
-            $this->bots->add($bot);
-        }
-
-        return $this;
     }
 
     public function getConceptArts(): ?Collection
