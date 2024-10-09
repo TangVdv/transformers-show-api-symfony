@@ -65,8 +65,12 @@ class Show
     #[ORM\OneToMany(targetEntity: VoiceLine::class, mappedBy: "show")]
     private ?Collection $voice_lines = null;
 
-    private ?Collection $artefacts = null;
+    #[ORM\OneToMany(targetEntity: Human::class, mappedBy: "show")]
     private ?Collection $humans = null;
+
+    #[ORM\OneToMany(targetEntity: Artefact::class, mappedBy: "show")]
+    private ?Collection $artefacts = null;
+
     private ?Collection $bots = null;
 
     public function __construct()
@@ -76,6 +80,8 @@ class Show
         $this->screen_times  = new ArrayCollection();
         $this->concept_arts  = new ArrayCollection();
         $this->voice_lines  = new ArrayCollection();
+        $this->artefacts = new ArrayCollection();
+        $this->humans = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -216,50 +222,6 @@ class Show
         return $this->screen_times;
     }
 
-    public function getArtefacts(): ?Collection
-    {
-        $this->artefacts  = new ArrayCollection();
-
-        foreach($this->screen_times as $screen_time){
-            foreach($screen_time->getArtefacts() as $artefact){
-                $this->addArtefact($artefact);
-            }
-        } 
-
-        return $this->artefacts;
-    }
-
-    public function addArtefact(Artefact $artefact): static
-    {
-        if (!$this->artefacts->contains($artefact)) {
-            $this->artefacts->add($artefact);
-        }
-
-        return $this;
-    }
-
-    public function getHumans(): ?Collection
-    {
-        $this->humans  = new ArrayCollection();
-
-        foreach($this->screen_times as $screen_time){
-            foreach($screen_time->getHumans() as $human){
-                $this->addHuman($human);
-            }
-        } 
-
-        return $this->humans;
-    }
-
-    public function addHuman(Human $human): static
-    {
-        if (!$this->humans->contains($human)) {
-            $this->humans->add($human);
-        }
-
-        return $this;
-    }
-
     public function getBots(): ?Collection
     {
         $this->bots  = new ArrayCollection();
@@ -290,5 +252,15 @@ class Show
     public function getVoiceLines(): ?Collection
     {
         return $this->voice_lines;
+    }
+
+    public function getArtefacts(): ?Collection
+    {
+        return $this->artefacts;
+    }
+
+    public function getHumans(): ?Collection
+    {
+        return $this->humans;
     }
 }

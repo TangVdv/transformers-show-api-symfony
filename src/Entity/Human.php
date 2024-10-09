@@ -3,9 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\HumanRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: HumanRepository::class)]
 #[ORM\Table(name: '`human`')]
@@ -16,6 +15,10 @@ class Human
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
+    #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\Length(min: 2, max: 255)]
+    private ?string $image = null;
+
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?Entity $entity = null;
@@ -24,16 +27,13 @@ class Human
     #[ORM\JoinColumn(nullable: false)]
     private ?Actor $actor = null;
 
-    /**
-     * @var Collection<int, ScreenTime>
-     */
-    #[ORM\ManyToMany(targetEntity: ScreenTime::class, mappedBy: "humans")]
-    private Collection $screen_times;
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Show $show = null;
 
-    public function __construct()
-    {
-        $this->screen_times = new ArrayCollection();
-    }
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?ScreenTime $screen_time = null;
 
     public function getId(): ?int
     {
@@ -43,6 +43,18 @@ class Human
     public function setId(int $id): static
     {
         $this->id = $id;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(string $image): static
+    {
+        $this->image = $image;
 
         return $this;
     }
@@ -71,27 +83,26 @@ class Human
         return $this;
     }
 
-    /**
-     * @return Collection<int, ScreenTime>
-     */
-    public function getScreenTimes(): ?Collection
+    public function getShow(): ?Show
     {
-        return $this->screen_times;
+        return $this->show;
     }
 
-    public function addScreenTime(ScreenTime $screenTime): static
+    public function setShow(Show $show): static
     {
-        if (!$this->screen_times->contains($screenTime)) {
-            $this->screen_times->add($screenTime);
-            $screenTime->addHuman($this);
-        }
+        $this->show = $show;
 
         return $this;
     }
 
-    public function removeScreenTime(ScreenTime $screenTime): static
+    public function getScreenTime(): ?ScreenTime
     {
-        $this->screen_times->removeElement($screenTime);
+        return $this->screen_time;
+    }
+
+    public function setScreenTime(ScreenTime $screen_time): static
+    {
+        $this->screen_time = $screen_time;
 
         return $this;
     }

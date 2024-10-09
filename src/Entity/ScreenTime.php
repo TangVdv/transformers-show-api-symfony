@@ -34,26 +34,14 @@ class ScreenTime
     #[Assert\NotNull()]
     private ?int $total = null;
 
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Show $show = null;
-
-    /**
-     * @var Collection<int, Artefact>
-     */
-    #[ORM\ManyToMany(targetEntity: Artefact::class, inversedBy: "screen_times")]
-    #[ORM\JoinTable(name: "screen_time_artefact")]
-    private Collection $artefacts;
-
-    /**
-     * @var Collection<int, Human>
-     */
-    #[ORM\ManyToMany(targetEntity: Human::class, inversedBy: "screen_times")]
-    #[ORM\JoinTable(name: "screen_time_human")]
-    private Collection $humans;
-
     #[ORM\OneToMany(targetEntity: Bot::class, mappedBy: "screen_time")]
     private ?Collection $bots = null;
+
+    #[ORM\OneToMany(targetEntity: Artefact::class, mappedBy: "screen_time")]
+    private ?Collection $artefacts = null;
+
+    #[ORM\OneToMany(targetEntity: Human::class, mappedBy: "screen_time")]
+    private ?Collection $humans = null;
 
     public function __construct()
     {
@@ -122,71 +110,17 @@ class ScreenTime
         return $this;
     }
 
-    public function getShow(): ?Show
-    {
-        return $this->show;
-    }
-
-    public function setShow(Show $show): static
-    {
-        $this->show = $show;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Artefact>
-     */
-    public function getArtefacts(): Collection
+    public function getArtefacts(): ?Collection
     {
         return $this->artefacts;
     }
 
-    public function addArtefact(Artefact $artefact): static
-    {
-        if (!$this->artefacts->contains($artefact)) {
-            $this->artefacts->add($artefact);
-        }
-
-        return $this;
-    }
-
-    public function removeArtefact(Artefact $artefact): static
-    {
-        $this->artefacts->removeElement($artefact);
-
-        return $this;
-    }
-
-
-    /**
-     * @return Collection<int, Human>
-     */
-    public function getHumans(): Collection
+    function getHumans(): ?Collection
     {
         return $this->humans;
     }
 
-    public function addHuman(Human $human): static
-    {
-        if (!$this->humans->contains($human)) {
-            $this->humans->add($human);
-        }
-
-        return $this;
-    }
-
-    public function removeHuman(Human $human): static
-    {
-        $this->humans->removeElement($human);
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Bot>
-     */
-    public function getBots(): Collection
+    public function getBots(): ?Collection
     {
         return $this->bots;
     }

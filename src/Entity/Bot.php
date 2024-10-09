@@ -43,6 +43,10 @@ class Bot
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    private ?Show $show = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
     private ?ScreenTime $screen_time = null;
 
     #[ORM\OneToMany(targetEntity: Belonging::class, mappedBy: "bot")]
@@ -159,6 +163,18 @@ class Bot
     public function setEntity(?Entity $entity): static
     {
         $this->entity = $entity;
+
+        return $this;
+    }
+
+    public function getShow(): ?Show
+    {
+        return $this->show;
+    }
+
+    public function setShow(?Show $show): static
+    {
+        $this->show = $show;
 
         return $this;
     }
