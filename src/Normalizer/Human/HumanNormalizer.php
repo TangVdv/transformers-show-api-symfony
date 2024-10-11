@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Normalizer;
+namespace App\Normalizer\Human;
 
 use App\Entity\Human;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -12,22 +12,17 @@ class HumanNormalizer implements NormalizerInterface
         $json = [
             "id" => $object->getId(),
             "name" => $object->getEntity()->getEntityName(),
-            "image" => $object->getEntity()->getImage(),
+            "image" => $object->getImage(),
             "actor" => [
                 "name" => $object->getActor()->getActorFirstname()." ".$object->getActor()->getActorLastname(),
                 "origin" => $object->getActor()->getNationality()->getCountry()
             ],
-            "show" => []
+            "screen_time" => $object->getScreenTime() ? $object->getScreenTime()->getTotal() : null,
+            "show" => [
+                "id" => $object->getShow()->getId(),
+                "name" => $object->getShow()->getShowName()
+            ]
         ];
-
-        foreach($object->getScreenTimes() as $screen_time){
-            $s = [
-                "id" => $screen_time->getShow()->getId(),
-                "name" => $screen_time->getShow()->getShowName(),
-                "screen_time" => $screen_time->getTotal()
-            ];
-            array_push($json["show"], $s);
-        }
 
         return $json;
     }
