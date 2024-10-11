@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\BelongingRepository;
+use App\Repository\MembershipRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[ORM\Entity(repositoryClass: BelongingRepository::class)]
-#[ORM\Table(name: '`belonging`')]
-class Belonging
+#[ORM\Entity(repositoryClass: MembershipRepository::class)]
+#[ORM\Table(name: '`membership`')]
+class Membership
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

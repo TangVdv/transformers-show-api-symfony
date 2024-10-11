@@ -11,11 +11,11 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use App\Repository\EntityRepository;
 use App\Repository\ShowRepository;
 use Symfony\Component\Serializer\Serializer;
-use App\Normalizer\CreateBotNormalizer;
+use App\Normalizer\Bot\CreateUpdateBotNormalizer;
 use App\Repository\FactionRepository;
-use App\Entity\Belonging;
+use App\Entity\Membership;
 use Doctrine\Common\Collections\ArrayCollection;
-use App\Repository\BelongingRepository;
+use App\Repository\MembershipRepository;
 
 class CreateBot extends BotController
 {
@@ -25,7 +25,7 @@ class CreateBot extends BotController
         methods: ['POST']
     )]
     #[IsGranted('ROLE_ADMIN', statusCode: 403, message: 'Forbidden')]
-    public function __invoke(Request $request, EntityManagerInterface $entityManager, EntityRepository $entityRepository, ShowRepository $showRepository, FactionRepository $factionRepository, BelongingRepository $belongingRepository): Response
+    public function __invoke(Request $request, EntityManagerInterface $entityManager, EntityRepository $entityRepository, ShowRepository $showRepository, FactionRepository $factionRepository, MembershipRepository $membershipRepository): Response
     {
         $payload = $request->getPayload();
         $params = [
@@ -151,11 +151,11 @@ class CreateBot extends BotController
                     return new Response("This faction doesn't exist : `{$arr["name"]}`", 404, ['Content-Type', 'application/json']);
                 }
                 else{
-                    $belonging = new Belonging();
-                    $belonging->setFaction($faction)
+                    $membership = new Membership();
+                    $membership->setFaction($faction)
                             ->setCurrent($arr["current"]);
-                    if(!$factions->contains($belonging)){
-                        $factions->add($belonging);
+                    if(!$factions->contains($membership)){
+                        $factions->add($membership);
                     }
                 }
             }
@@ -186,19 +186,13 @@ class CreateBot extends BotController
 
         if(count($factions) > 0){
             foreach($factions as $faction){
-                $belonging = $belongingRepository->findOneBy(array(
-                    "bot" => $bot,
-                    "faction" => $faction->getFaction()
-                ));
-                if($belonging === null){
-                    $faction->setBot($bot);
-                    $entityManager->persist($faction);
-                    $entityManager->flush();   
-                }
+                $faction->setBot($bot);
+                $entityManager->persist($faction);
+                $entityManager->flush();   
             }
         }
 
-        $serializer = new Serializer([new CreateBotNormalizer]);
+        $serializer = new Serializer([new CreateUpdateBotNormalizer]);
         $data = $serializer->normalize([
             "bot" => $bot
         ], "json");

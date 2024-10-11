@@ -49,8 +49,8 @@ class Bot
     #[ORM\JoinColumn(nullable: true)]
     private ?ScreenTime $screen_time = null;
 
-    #[ORM\OneToMany(targetEntity: Belonging::class, mappedBy: "bot")]
-    private ?Collection $factions;
+    #[ORM\OneToMany(targetEntity: Membership::class, mappedBy: "bot")]
+    private ?Collection $memberships;
 
     #[ORM\ManyToMany(targetEntity: Alt::class, inversedBy: "bots")]
     #[ORM\JoinTable(name: 'bot_alt')]
@@ -61,7 +61,7 @@ class Bot
 
     public function __construct()
     {
-        $this->factions = new ArrayCollection();
+        $this->memberships = new ArrayCollection();
         $this->alts = new ArrayCollection();
         $this->voice_actors = new ArrayCollection();
     }
@@ -194,9 +194,18 @@ class Bot
     /**
      * @return Collection<int, Faction>
      */
-    public function getFactions(): Collection
+    public function getMemberships(): Collection
     {
-        return $this->factions;
+        return $this->memberships;
+    }
+
+    public function addMembership(Membership $membership): static
+    {
+        if (!$this->memberships->contains($membership)) {
+            $this->memberships->add($membership);
+        }
+
+        return $this;
     }
 
     /**

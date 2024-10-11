@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Normalizer;
+namespace App\Normalizer\Bot;
 
 use App\Entity\Bot;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class CreateBotNormalizer implements NormalizerInterface
+class BotNormalizer implements NormalizerInterface
 {
     public function normalize(mixed $object, ?string $format = null, array $context = []): array
     {        
@@ -20,16 +20,40 @@ class CreateBotNormalizer implements NormalizerInterface
             "robot_to_alt_count" => $object->getRobotToAlt(),
             "death_count" => $object->getDeathCount(),
             "kill_count" => $object->getKillCount(),
+            "alt" => [],
+            "voiceactor" => [],
             "screen_time" => $object->getScreenTime() ? $object->getScreenTime()->getTotal() : null,
-            "show" => $object->getShow()->getShowName()
+            "show" => [ 
+                "id" => $object->getShow()->getId(),
+                "name" => $object->getShow()->getShowName()
+            ]
         ];
 
-        foreach($object->getFactions() as $faction){
+        foreach($object->getMemberships() as $membership){
             $f = [
-                "name" => $faction->getFaction()->getFactionName(),
-                "current" => $faction->getCurrent() == 1
+                "name" => $membership->getFaction()->getFactionName(),
+                "current" => $membership->getCurrent() == 1
             ];
             array_push($json["faction"], $f);
+        }
+
+        foreach($object->getAlts() as $alt){
+            $a = [
+                "id" => $alt->getId(),
+                "name" => $alt->getAltName(),
+                "image" => $alt->getImage()
+            ];
+            array_push($json["alt"], $a);
+        }
+
+        foreach($object->getVoiceActors() as $voiceactor){
+            $va = [
+                "id" => $voiceactor->getId(),
+                "name" => $voiceactor->getVoiceActorFirstname()." ".$voiceactor->getVoiceActorLastname(),
+                "image" => $voiceactor->getImage(),
+                "origin" => $voiceactor->getNationality()->getCountry()
+            ];
+            array_push($json["voiceactor"], $va);
         }
 
         return $json;
