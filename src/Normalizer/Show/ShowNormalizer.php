@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Normalizer;
+namespace App\Normalizer\Show;
 
 use App\Entity\Show;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
