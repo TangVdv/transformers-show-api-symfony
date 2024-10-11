@@ -7,14 +7,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-use App\Repository\MembershipRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use App\Entity\Membership;
-use App\Repository\FactionRepository;
 use App\Repository\ShowRepository;
 use App\Repository\EntityRepository;
 use Symfony\Component\Serializer\Serializer;
-use App\Normalizer\Human\CreateUpdateHumanNormalizer;
 use App\Normalizer\Human\HumanNormalizer;
 use App\Repository\ScreenTimeRepository;
 
@@ -27,7 +22,7 @@ class UpdateHuman extends HumanController
         requirements: ['id' => '\d+']
     )]
     #[IsGranted('ROLE_ADMIN', statusCode: 403, message: 'Forbidden')]
-    public function __invoke(int $id, Request $request, EntityManagerInterface $entityManager, MembershipRepository $membershipRepository, FactionRepository $factionRepository, ShowRepository $showRepository, EntityRepository $entityRepository, ScreenTimeRepository $screenTimeRepository): Response
+    public function __invoke(int $id, Request $request, EntityManagerInterface $entityManager, ShowRepository $showRepository, EntityRepository $entityRepository, ScreenTimeRepository $screenTimeRepository): Response
     {
         $human = $this->humanRepository->findOneWithParams(array("id" => $id));
 
@@ -157,7 +152,7 @@ class UpdateHuman extends HumanController
 
         $serializer = new Serializer([new HumanNormalizer]);
         $data = $serializer->normalize([
-            "bot" => $human
+            "human" => $human
         ], "json");
         $json = $this->serializer->serialize($data, 'json');
         return new Response($json, 200, ['Content-Type', 'application/json']);

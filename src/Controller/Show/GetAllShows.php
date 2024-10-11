@@ -5,7 +5,7 @@ namespace App\Controller\Show;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\Serializer;
-use App\Normalizer\AllShowsNormalizer;
+use App\Normalizer\Show\AllShowsNormalizer;
 
 class GetAllShows extends ShowController
 {

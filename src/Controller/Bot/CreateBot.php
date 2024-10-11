@@ -15,7 +15,6 @@ use App\Normalizer\Bot\CreateUpdateBotNormalizer;
 use App\Repository\FactionRepository;
 use App\Entity\Membership;
 use Doctrine\Common\Collections\ArrayCollection;
-use App\Repository\MembershipRepository;
 
 class CreateBot extends BotController
 {
@@ -25,7 +24,7 @@ class CreateBot extends BotController
         methods: ['POST']
     )]
     #[IsGranted('ROLE_ADMIN', statusCode: 403, message: 'Forbidden')]
-    public function __invoke(Request $request, EntityManagerInterface $entityManager, EntityRepository $entityRepository, ShowRepository $showRepository, FactionRepository $factionRepository, MembershipRepository $membershipRepository): Response
+    public function __invoke(Request $request, EntityManagerInterface $entityManager, EntityRepository $entityRepository, ShowRepository $showRepository, FactionRepository $factionRepository): Response
     {
         $payload = $request->getPayload();
         $params = [
@@ -143,7 +142,7 @@ class CreateBot extends BotController
             return new Response("This show doesn't exist", 404, ['Content-Type', 'application/json']);
         }
 
-        $factions = new ArrayCollection();
+        $memberships = new ArrayCollection();
         if(count($params["faction"]["value"]) > 0){
             foreach($params["faction"]["value"] as $arr){
                 $faction = $factionRepository->findOneBy(array("faction_name" => $arr["name"]));
@@ -154,8 +153,8 @@ class CreateBot extends BotController
                     $membership = new Membership();
                     $membership->setFaction($faction)
                             ->setCurrent($arr["current"]);
-                    if(!$factions->contains($membership)){
-                        $factions->add($membership);
+                    if(!$memberships->contains($membership)){
+                        $memberships->add($membership);
                     }
                 }
             }
@@ -184,11 +183,11 @@ class CreateBot extends BotController
         $entityManager->persist($bot);
         $entityManager->flush();
 
-        if(count($factions) > 0){
-            foreach($factions as $faction){
-                $faction->setBot($bot);
-                $entityManager->persist($faction);
-                $entityManager->flush();   
+        if(count($memberships) > 0){
+            foreach($memberships as $membership){
+                $membership->setBot($bot);
+                $entityManager->persist($membership);
+                $entityManager->flush();
             }
         }
 

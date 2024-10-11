@@ -39,7 +39,7 @@ class ShowNormalizer implements NormalizerInterface
                 "name" => $bot->getEntity()->getEntityName(),
                 "image" => $bot->getImage(),
                 "description" => $bot->getDescription(),
-                "screen_time" => $bot->getScreenTime()->getTotal(),
+                "screen_time" => $bot->getScreenTime() ? $bot->getScreenTime()->getTotal() : null,
                 "faction" => [],
                 "alt" => [],
                 "voiceactor" => []
@@ -55,10 +55,10 @@ class ShowNormalizer implements NormalizerInterface
                 array_push($b["alt"], $a);
             }
 
-            foreach($bot->getFactions() as $faction){
+            foreach($bot->getMemberships() as $membership){
                 $f = [
-                    "name" => $faction->getFaction()->getFactionName(),
-                    "current" => $faction->getCurrent() == 1
+                    "name" => $membership->getFaction()->getFactionName(),
+                    "current" => $membership->getCurrent() == 1
                 ];
                 array_push($b["faction"], $f);
             }
@@ -81,7 +81,7 @@ class ShowNormalizer implements NormalizerInterface
                 "id" => $human->getId(),
                 "name" => $human->getEntity()->getEntityName(),
                 "image" => $human->getEntity()->getImage(),
-                "screen_time" => $human->getScreenTimes()[0]->getTotal(),
+                "screen_time" => $human->getScreenTime() ? $human->getScreenTime()->getTotal() : null,
                 "actor" => [
                     "name" => $human->getActor()->getActorFirstname()." ".$human->getActor()->getActorLastname(),
                     "origin" => $human->getActor()->getNationality()->getCountry()
@@ -134,7 +134,7 @@ class ShowNormalizer implements NormalizerInterface
                 "id" => $artefact->getId(),
                 "name" => $artefact->getEntity()->getEntityName(),
                 "image" => $artefact->getEntity()->getImage(),
-                "screen_time" => $artefact->getScreenTimes()[0]->getTotal()
+                "screen_time" => $artefact->getScreenTime() ? $artefact->getScreenTime()->getTotal() : null,
             ];
             array_push($json["artefact"], $a);
         }

@@ -5,7 +5,7 @@ namespace App\Normalizer\Show;
 use App\Entity\Show;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class CreateShowNormalizer implements NormalizerInterface
+class CreateUpdateShowNormalizer implements NormalizerInterface
 {
     public function normalize(mixed $object, ?string $format = null, array $context = []): array
     {        

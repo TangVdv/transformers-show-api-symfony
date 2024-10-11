@@ -7,6 +7,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Serializer\Serializer;
+use App\Normalizer\Show\CreateUpdateShowNormalizer;
 
 class UpdateShow extends ShowController
 {
@@ -94,7 +96,11 @@ class UpdateShow extends ShowController
         $entityManager->persist($show);
         $entityManager->flush();
 
-        $json = $this->serializer->serialize(["show" => $show], 'json');
+        $serializer = new Serializer([new CreateUpdateShowNormalizer]);
+        $data = $serializer->normalize([
+            "show" => $show
+        ], "json");
+        $json = $this->serializer->serialize($data, 'json');
         return new Response($json, 200, ['Content-Type', 'application/json']);
     }
 }
