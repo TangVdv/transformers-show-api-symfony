@@ -84,7 +84,8 @@ class BotRepository extends ServiceEntityRepository
                         }
                     }
 
-                    return $query->getQuery()
+                    return $query->setMaxResults(1)
+                                ->getQuery()
                                 ->getOneOrNullResult();
     }
 
