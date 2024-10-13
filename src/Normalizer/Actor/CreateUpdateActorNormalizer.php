@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Normalizer;
+namespace App\Normalizer\Actor;
 
 use App\Entity\Actor;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class ActorNormalizer implements NormalizerInterface
+class CreateUpdateActorNormalizer implements NormalizerInterface
 {
     public function normalize(mixed $object, ?string $format = null, array $context = []): array
     {        
@@ -14,18 +14,8 @@ class ActorNormalizer implements NormalizerInterface
             "first_name" => $object->getActorFirstname(),
             "last_name" => $object->getActorLastname(),
             "image" => $object->getImage(),
-            "origin" => $object->getNationality()->getCountry(),
-            "character" => []
+            "origin" => $object->getNationality()->getCountry()
         ];
-
-        foreach($object->getHumans() as $human){
-            $h = [
-                "id" => $human->getId(),
-                "name" => $human->getEntity()->getEntityName(),
-                "image" => $human->getEntity()->getImage(),
-            ];
-            array_push($json["character"], $h);
-        }
 
         return $json;
     }

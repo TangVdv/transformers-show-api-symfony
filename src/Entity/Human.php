@@ -83,6 +83,13 @@ class Human
         return $this;
     }
 
+    public function removeActor(): static
+    {
+        $this->actor = null;
+
+        return $this;
+    }
+
     public function getShow(): ?Show
     {
         return $this->show;
