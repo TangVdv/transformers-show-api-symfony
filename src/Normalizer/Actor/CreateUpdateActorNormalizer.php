@@ -14,7 +14,7 @@ class CreateUpdateActorNormalizer implements NormalizerInterface
             "first_name" => $object->getActorFirstname(),
             "last_name" => $object->getActorLastname(),
             "image" => $object->getImage(),
-            "origin" => $object->getNationality()->getCountry()
+            "origin" => $object->getNationality() !== null ? $object->getNationality()->getCountry() : null
         ];
 
         return $json;
