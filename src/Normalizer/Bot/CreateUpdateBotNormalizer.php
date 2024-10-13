@@ -11,7 +11,7 @@ class CreateUpdateBotNormalizer implements NormalizerInterface
     {        
         $json = [
             "id" => $object->getId(),
-            "name" => $object->getEntity()->getEntityName(),
+            "name" => $object->getEntity() !== null ? $object->getEntity()->getEntityName() : null,
             "description" => $object->getDescription(),
             "image" => $object->getImage(),
             "faction" => [],
@@ -21,7 +21,7 @@ class CreateUpdateBotNormalizer implements NormalizerInterface
             "death_count" => $object->getDeathCount(),
             "kill_count" => $object->getKillCount(),
             "screen_time" => $object->getScreenTime() ? $object->getScreenTime()->getTotal() : null,
-            "show" => $object->getShow()->getShowName()
+            "show" => $object->getShow() !== null ? $object->getShow()->getShowName() : null
         ];
 
         foreach($object->getMemberships() as $membership){

@@ -21,9 +21,9 @@ class AltNormalizer implements NormalizerInterface
         foreach($object->getBots() as $bot){
             $b = [
                 "id" => $bot->getId(),
-                "name" => $bot->getEntity()->getEntityName(),
+                "name" => $bot->getEntity() !== null ? $bot->getEntity()->getEntityName() : null,
                 "image" => $bot->getImage(),
-                "show" => $bot->getShow()->getShowName()
+                "show" => $bot->getShow() !== null ? $bot->getShow()->getShowName() : null
             ];
             array_push($json["bot"], $b);
         }

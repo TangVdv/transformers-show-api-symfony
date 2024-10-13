@@ -11,20 +11,28 @@ class HumanNormalizer implements NormalizerInterface
     {        
         $json = [
             "id" => $object->getId(),
-            "name" => $object->getEntity()->getEntityName(),
+            "name" => $object->getEntity() !== null ? $object->getEntity()->getEntityName() : null,
             "image" => $object->getImage(),
-            "actor" => [
-                "name" => $object->getActor()->getActorFirstname()." ".$object->getActor()->getActorLastname(),
-                "origin" => $object->getActor()->getNationality()->getCountry()
-            ],
+            "actor" => [],
             "screen_time" => $object->getScreenTime() ? $object->getScreenTime()->getTotal() : null,
-            "show" => [
-                "id" => $object->getShow()->getId(),
-                "name" => $object->getShow()->getShowName()
-            ]
+            "show" => []
         ];
 
         return $json;
+
+        if($object->getShow() !== null){
+            $json["show"] = [ 
+                "id" => $object->getShow()->getId(),
+                "name" => $object->getShow()->getShowName()
+            ];
+        }
+
+        if($object->getActor() !== null){
+            $json["actor"] = [ 
+                "name" => $object->getActor()->getActorFirstname()." ".$object->getActor()->getActorLastname(),
+                "origin" => $object->getActor()->getNationality() !== null ? $object->getActor()->getNationality()->getCountry() : null
+            ];
+        }
     }
 
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []):bool

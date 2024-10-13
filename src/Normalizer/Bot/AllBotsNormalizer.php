@@ -11,17 +11,21 @@ class AllBotsNormalizer implements NormalizerInterface
     {        
         $json = [
             "id" => $object->getId(),
-            "name" => $object->getEntity()->getEntityName(),
+            "name" => $object->getEntity() !== null ? $object->getEntity()->getEntityName() : null,
             "description" => $object->getDescription(),
             "image" => $object->getImage(),
             "faction" => [],
             "alt" => [],
             "screen_time" => $object->getScreenTime() ? $object->getScreenTime()->getTotal() : null,
-            "show" => [ 
+            "show" => []
+        ];
+
+        if($object->getShow() !== null){
+            $json["show"] = [ 
                 "id" => $object->getShow()->getId(),
                 "name" => $object->getShow()->getShowName()
-            ]
-        ];
+            ];
+        }
 
         foreach($object->getmemberships() as $membership){
             $f = [

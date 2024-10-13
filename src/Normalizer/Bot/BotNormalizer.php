@@ -11,7 +11,7 @@ class BotNormalizer implements NormalizerInterface
     {        
         $json = [
             "id" => $object->getId(),
-            "name" => $object->getEntity()->getEntityName(),
+            "name" => $object->getEntity() !== null ? $object->getEntity()->getEntityName() : null,
             "description" => $object->getDescription(),
             "image" => $object->getImage(),
             "faction" => [],
@@ -23,11 +23,15 @@ class BotNormalizer implements NormalizerInterface
             "alt" => [],
             "voiceactor" => [],
             "screen_time" => $object->getScreenTime() ? $object->getScreenTime()->getTotal() : null,
-            "show" => [ 
+            "show" => []
+        ];
+
+        if($object->getShow() !== null){
+            $json["show"] = [ 
                 "id" => $object->getShow()->getId(),
                 "name" => $object->getShow()->getShowName()
-            ]
-        ];
+            ];
+        }
 
         foreach($object->getMemberships() as $membership){
             $f = [

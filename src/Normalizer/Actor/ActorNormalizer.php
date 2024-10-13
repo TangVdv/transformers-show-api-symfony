@@ -21,9 +21,9 @@ class ActorNormalizer implements NormalizerInterface
         foreach($object->getHumans() as $human){
             $h = [
                 "id" => $human->getId(),
-                "name" => $human->getEntity()->getEntityName(),
+                "name" => $human->getEntity() !== null ? $human->getEntity()->getEntityName() : null,
                 "image" => $human->getImage(),
-                "show" => $human->getShow()->getShowName()
+                "show" => $human->getShow() !== null ? $human->getShow()->getShowName() : null
             ];
             array_push($json["character"], $h);
         }

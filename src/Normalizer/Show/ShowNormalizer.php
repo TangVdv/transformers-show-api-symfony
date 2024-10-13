@@ -36,7 +36,7 @@ class ShowNormalizer implements NormalizerInterface
         foreach($object->getBots() as $bot){
             $b = [
                 "id" => $bot->getId(),
-                "name" => $bot->getEntity()->getEntityName(),
+                "name" => $bot->getEntity() !== null ? $bot->getEntity()->getEntityName() : null,
                 "image" => $bot->getImage(),
                 "description" => $bot->getDescription(),
                 "screen_time" => $bot->getScreenTime() ? $bot->getScreenTime()->getTotal() : null,
@@ -68,7 +68,7 @@ class ShowNormalizer implements NormalizerInterface
                     "id" => $voiceactor->getId(),
                     "name" => $voiceactor->getVoiceActorFirstname()." ".$voiceactor->getVoiceActorLastname(),
                     "image" => $voiceactor->getImage(),
-                    "origin" => $voiceactor->getNationality()->getCountry()
+                    "origin" => $voiceactor->getNationality() !== null ? $voiceactor->getNationality()->getCountry() : null
                 ];
                 array_push($b["voiceactor"], $va);
             }
@@ -79,14 +79,18 @@ class ShowNormalizer implements NormalizerInterface
         foreach($object->getHumans() as $human){
             $h = [
                 "id" => $human->getId(),
-                "name" => $human->getEntity()->getEntityName(),
-                "image" => $human->getEntity()->getImage(),
+                "name" => $human->getEntity() !== null ? $human->getEntity()->getEntityName() : null,
+                "image" => $human->getEntity() !== null ? $human->getEntity()->getImage() : null,
                 "screen_time" => $human->getScreenTime() ? $human->getScreenTime()->getTotal() : null,
-                "actor" => [
-                    "name" => $human->getActor()->getActorFirstname()." ".$human->getActor()->getActorLastname(),
-                    "origin" => $human->getActor()->getNationality()->getCountry()
-                ]
+                "actor" => []
             ];
+            if($human->getActor() !== null){
+                $h["actor"] = [
+                    "name" => $human->getActor()->getActorFirstname()." ".$human->getActor()->getActorLastname(),
+                    "origin" => $human->getActor()->getNationality() !== null ? $human->getActor()->getNationality()->getCountry() : null
+                ];
+            }
+
             array_push($json["human"], $h);
         }
 
@@ -99,11 +103,15 @@ class ShowNormalizer implements NormalizerInterface
                 "artist" => [],
                 "srclink" => $concept_art->getSrclink(),
                 "date" => $concept_art->getDate(),
-                "character" => [
+                "character" => []
+            ];
+
+            if($human->getEntity() !== null){
+                $h["character"] = [
                     "id" => $concept_art->getEntity()->getId(),
                     "name" => $concept_art->getEntity()->getEntityName()
-                ]
-            ];
+                ];
+            }
 
             foreach($concept_art->getArtists() as $artist){
                 $a = [
@@ -132,8 +140,8 @@ class ShowNormalizer implements NormalizerInterface
         foreach($object->getArtefacts() as $artefact){
             $a = [
                 "id" => $artefact->getId(),
-                "name" => $artefact->getEntity()->getEntityName(),
-                "image" => $artefact->getEntity()->getImage(),
+                "name" => $artefact->getEntity() !== null ? $artefact->getEntity()->getEntityName() : null,
+                "image" => $artefact->getImage(),
                 "screen_time" => $artefact->getScreenTime() ? $artefact->getScreenTime()->getTotal() : null,
             ];
             array_push($json["artefact"], $a);
