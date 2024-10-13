@@ -29,7 +29,7 @@ class VoiceActor
     private ?string $image = null;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Nationality $Nationality = null;
 
     #[ORM\ManyToMany(targetEntity: Bot::class, inversedBy: "voice_actors")]

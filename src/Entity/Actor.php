@@ -29,7 +29,7 @@ class Actor
     private ?string $image = null;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Nationality $nationality = null;
 
     /**
