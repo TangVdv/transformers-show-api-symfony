@@ -37,8 +37,7 @@ class UpdateShow extends ShowController
             "name" => [
                 "value" => $payload->get("name"),
                 "type" => "string",
-                "nullable" => true,
-                "method" => "setShowName"
+                "nullable" => true
             ],
             "description" => [
                 "value" =>  $payload->get("description"),
@@ -87,9 +86,17 @@ class UpdateShow extends ShowController
                     if($value["type"] === "string"){
                         $value["value"] = preg_replace('/\s+/','', $value["value"]);
                     }
-                    $method = $value["method"];
-                    $show->$method($value["value"]);
+                    if(array_key_exists("method", $value)){
+                        $method = $value["method"];
+                        $show->$method($value["value"]);
+                    }
                 } 
+            }
+        }
+
+        if($params["name"]["value"] !== null){
+            if($this->showRepository->findOneBy(array("show_name" => $params["name"]["value"]))){
+                return new Response("A show with this name already exist", 400, ['Content-Type', 'application/json']);
             }
         }
 

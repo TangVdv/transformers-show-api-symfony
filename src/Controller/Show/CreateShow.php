@@ -87,7 +87,7 @@ class CreateShow extends ShowController
         }
 
         if($this->showRepository->findOneBy(array("show_name" => $params["name"]["value"]))){
-            return new Response("This show already exist");
+            return new Response("This show already exist", 400, ['Content-Type', 'application/json']);
         }
 
         $show = new Show();
