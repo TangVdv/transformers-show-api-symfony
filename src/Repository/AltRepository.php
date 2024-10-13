@@ -16,28 +16,44 @@ class AltRepository extends ServiceEntityRepository
         parent::__construct($registry, Alt::class);
     }
 
-//    /**
-//     * @return Alt[] Returns an array of Alt objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('a.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function findAllWithParams($limit, $bot = null)
+    {
+        $query = $this->createQueryBuilder('a');
+            //BOT
+            if($bot !== null){
+                $query->leftJoin('a.bots', 'b')
+                    ->addSelect('b')
+                    ->leftJoin('b.entity', 'e')
+                    ->addSelect('e')
+                    ->where('e.entity_name LIKE :name')
+                    ->setParameter('name', '%'.$bot.'%');
+            }
 
-//    public function findOneBySomeField($value): ?Alt
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+            return $query->setMaxResults($limit)
+                ->getQuery()
+                ->getResult();
+    }
+
+    public function findOneWithParams(array $params)
+    {
+        $query = $this->createQueryBuilder('a')
+                    //BOT
+                    ->leftJoin('a.bots', 'b')
+                    ->addSelect('b');
+
+                    foreach($params as $key => $value){
+                        if($key === "id"){
+                            $query->where('a.id = :id')
+                                ->setParameter('id', $value);
+                        }
+                        else if($key === "name"){
+                            $query->where('a.alt_name LIKE :name')
+                                ->setParameter('name', '%'.$value.'%');
+                        }
+                    }
+
+                    return $query->setMaxResults(1)
+                                ->getQuery()
+                                ->getOneOrNullResult();
+    }
 }

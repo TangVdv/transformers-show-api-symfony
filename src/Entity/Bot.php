@@ -52,8 +52,7 @@ class Bot
     #[ORM\OneToMany(targetEntity: Membership::class, mappedBy: "bot")]
     private ?Collection $memberships;
 
-    #[ORM\ManyToMany(targetEntity: Alt::class, inversedBy: "bots")]
-    #[ORM\JoinTable(name: 'bot_alt')]
+    #[ORM\ManyToMany(targetEntity: Alt::class, mappedBy: "bots")]
     private ?Collection $alts;
 
     #[ORM\ManyToMany(targetEntity: VoiceActor::class, mappedBy: "bots")]

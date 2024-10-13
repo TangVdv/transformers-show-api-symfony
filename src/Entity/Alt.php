@@ -31,7 +31,8 @@ class Alt
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $image = null;
 
-    #[ORM\ManyToMany(targetEntity: Bot::class, mappedBy: "alts")]
+    #[ORM\ManyToMany(targetEntity: Bot::class, inversedBy: "alts")]
+    #[ORM\JoinTable(name: 'bot_alt')]
     private ?Collection $bots;
 
     public function __construct()
@@ -110,7 +111,7 @@ class Alt
         return $this;
     }
 
-    public function removeArtefact(Bot $bot): static
+    public function removeBot(Bot $bot): static
     {
         $this->bots->removeElement($bot);
 
