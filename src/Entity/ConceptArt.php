@@ -151,6 +151,13 @@ class ConceptArt
         return $this;
     }
 
+    public function removeShow(): static
+    {
+        $this->show = null;
+
+        return $this;
+    }
+
     /**
      * @return Collection<int, Artist>
      */

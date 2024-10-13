@@ -89,4 +89,11 @@ class VoiceLine
 
         return $this;
     }
+
+    public function removeShow(): static
+    {
+        $this->show = null;
+
+        return $this;
+    }
 }

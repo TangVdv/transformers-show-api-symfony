@@ -24,7 +24,6 @@ class DeleteActor extends ActorController
             foreach($actor->getHumans() as $human){
                 $human->removeActor();
                 $entityManager->persist($human);
-                $entityManager->flush();
             }
             $entityManager->remove($actor);
             $entityManager->flush();

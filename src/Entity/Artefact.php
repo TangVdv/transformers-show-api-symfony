@@ -79,6 +79,13 @@ class Artefact
         return $this;
     }
 
+    public function removeShow(): static
+    {
+        $this->show = null;
+
+        return $this;
+    }
+
     public function getScreenTime(): ?ScreenTime
     {
         return $this->screen_time;
