@@ -21,7 +21,7 @@ class Artefact
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: true)]
-    private ?Entity $Entity = null;
+    private ?Entity $entity = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: true)]
@@ -57,12 +57,12 @@ class Artefact
 
     public function getEntity(): ?Entity
     {
-        return $this->Entity;
+        return $this->entity;
     }
 
-    public function setEntity(?Entity $Entity): static
+    public function setEntity(?Entity $entity): static
     {
-        $this->Entity = $Entity;
+        $this->entity = $entity;
 
         return $this;
     }

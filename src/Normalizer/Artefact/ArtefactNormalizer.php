@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Normalizer;
+namespace App\Normalizer\Artefact;
 
 use App\Entity\Artefact;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -11,18 +11,17 @@ class ArtefactNormalizer implements NormalizerInterface
     {        
         $json = [
             "id" => $object->getId(),
-            "name" => $object->getEntity()->getEntityName(),
+            "name" => $object->getEntity() !== null ? $object->getEntity()->getEntityName() : null,
             "image" => $object->getEntity()->getImage(),
+            "screen_time" => $object->getScreenTime() !== null ? $object->getScreenTime()->getTotal() : null,
             "show" => []
         ];
 
-        foreach($object->getScreenTimes() as $screen_time){
-            $sc = [
-                "id" => $screen_time->getShow()->getId(),
-                "name" => $screen_time->getShow()->getShowName(),
-                "screen_time" => $screen_time->getTotal()
+        if($object->getShow() !== null){
+            $json["show"] = [
+                "id" => $object->getShow()->getId(),
+                "name" => $object->getShow()->getShowName()
             ];
-            array_push($json["show"], $sc);
         }
 
         return $json;

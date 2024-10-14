@@ -16,14 +16,49 @@ class ArtefactRepository extends ServiceEntityRepository
         parent::__construct($registry, Artefact::class);
     }
 
-    public function findWithScreenTimes($value)
+    public function findAllWithParams($limit, $show = null)
     {
-        return $this->createQueryBuilder('a')
-            ->leftJoin('a.screen_times', 'st')
-            ->addSelect('st')
-            ->where('a.id = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getResult();
+        $query = $this->createQueryBuilder('a');
+            //SHOW
+            if($show !== null){
+                $query->leftJoin('a.show', 's')
+                    ->addSelect('s')
+                    ->where('s.show_name LIKE :name')
+                    ->setParameter('name', '%'.$show.'%');
+            }
+
+            return $query->setMaxResults($limit)
+                ->getQuery()
+                ->getResult();
+    }
+
+    public function findOneWithParams(array $params)
+    {
+        $query = $this->createQueryBuilder('a')
+                    //ENTITY
+                    ->leftJoin('a.entity', 'e')
+                    ->addSelect('e');
+
+                    foreach($params as $key => $value){
+                        if($key === "id"){
+                            $query->where('a.id = :id')
+                                ->setParameter('id', $value);
+                        }
+                        else if($key === "name"){
+                            $query->where('e.entity_name LIKE :entity_name')
+                                ->setParameter('entity_name', '%'.$value.'%');
+                        }
+
+                        if($key === "show"){
+                            $query->leftJoin('a.show', 's')
+                                ->addSelect('s')
+                                ->andWhere('s.show_name LIKE :show_name')
+                                ->setParameter('show_name', '%'.$value.'%');
+                        }
+                    }
+
+                    return $query->setMaxResults(1)
+                                ->getQuery()
+                                ->getOneOrNullResult();
     }
 }
