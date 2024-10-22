@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Normalizer;
+namespace App\Normalizer\VoiceLine;
 
 use App\Entity\VoiceLine;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -13,8 +13,8 @@ class VoiceLineNormalizer implements NormalizerInterface
             "id" => $object->getId(),
             "content" => $object->getContent(),
             "number" => $object->getNumber(),
-            "character" => $object->getEntity()->getEntityName(),
-            "show" => $object->getShow()->getShowName()
+            "character" => $object->getEntity() !== null ? $object->getEntity()->getEntityName() : null,
+            "show" => $object->getShow() !== null ? $object->getShow()->getShowName() : null
         ];
 
         return $json;
