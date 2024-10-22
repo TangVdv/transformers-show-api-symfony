@@ -15,4 +15,12 @@ class EntityRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Entity::class);
     }
+
+    public function findAllWithParams($limit)
+    {
+        return $this->createQueryBuilder('e')
+                ->setMaxResults($limit)
+                ->getQuery()
+                ->getResult();
+    }
 }

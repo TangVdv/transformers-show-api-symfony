@@ -42,6 +42,8 @@ security:
         - { path: ^/api/me,         roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/api/artists,    roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/api/artist,     roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/entities,    roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/entity,     roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/api,            roles: PUBLIC_ACCESS }
 
 when@test:
