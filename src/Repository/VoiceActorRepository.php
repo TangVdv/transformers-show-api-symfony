@@ -32,13 +32,13 @@ class VoiceActorRepository extends ServiceEntityRepository
                 ->addSelect('s');
 
             if($show !== null){
-                $query->andWhere('s.show_name LIKE :name')
-                    ->setParameter('name', '%'.$show.'%');
+                $query->andWhere('s.show_name LIKE :show_name')
+                    ->setParameter('show_name', '%'.$show.'%');
             }
 
             if($bot !== null){
-                $query->andWhere('e.entity_name LIKE :name')
-                    ->setParameter('name', '%'.$bot.'%');
+                $query->andWhere('e.entity_name LIKE :bot_name')
+                    ->setParameter('bot_name', '%'.$bot.'%');
             }
 
             return $query->setMaxResults($limit)

@@ -42,7 +42,7 @@ class GroupCreatorShow extends CreatorController
 
             $serializer = new Serializer([new CreatorNormalizer]);
             $data = $serializer->normalize([
-                "creaotr" => $creator
+                "creator" => $creator
             ], "json");
             $json = $this->serializer->serialize($data, "json");
             return new Response($json, 200, ['Content-Type', 'application/json']);

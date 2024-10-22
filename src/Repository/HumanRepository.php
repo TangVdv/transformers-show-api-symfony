@@ -23,8 +23,8 @@ class HumanRepository extends ServiceEntityRepository
             if($show !== null){
                 $query->leftJoin('h.show', 's')
                     ->addSelect('s')
-                    ->where('s.show_name LIKE :showname')
-                    ->setParameter('showname', '%'.$show.'%');
+                    ->where('s.show_name LIKE :show_name')
+                    ->setParameter('show_name', '%'.$show.'%');
             }
 
             return $query->setMaxResults($limit)

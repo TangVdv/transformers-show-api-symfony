@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Normalizer;
+namespace App\Normalizer\User;
 
 use App\Entity\User;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;

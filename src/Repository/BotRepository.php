@@ -23,8 +23,8 @@ class BotRepository extends ServiceEntityRepository
             if($alt !== null){
                 $query->leftJoin('b.alts', 'a')
                     ->addSelect('a')
-                    ->where('a.alt_name = :altname')
-                    ->setParameter('altname', $alt);
+                    ->where('a.alt_name = :alt_name')
+                    ->setParameter('alt_name', $alt);
             }
 
             //FACTION
@@ -33,8 +33,8 @@ class BotRepository extends ServiceEntityRepository
                     ->addSelect('membership')
                     ->leftJoin('membership.faction', 'f')
                     ->addSelect('f')
-                    ->andWhere('f.faction_name = :factionname')
-                    ->setParameter('factionname', $faction);
+                    ->andWhere('f.faction_name = :faction_name')
+                    ->setParameter('faction_name', $faction);
             }
 
             return $query->setMaxResults($limit)
@@ -87,16 +87,5 @@ class BotRepository extends ServiceEntityRepository
                     return $query->setMaxResults(1)
                                 ->getQuery()
                                 ->getOneOrNullResult();
-    }
-
-    public function findOneByEntityAndShow($entity, $show)
-    {
-        return $this->createQueryBuilder('b')
-                ->where('b.entity = :entity')
-                ->setParameter('entity', $entity)
-                ->andWhere('b.show = :show')
-                ->setParameter('show', $show)
-                ->getQuery()
-                ->getOneOrNullResult();
     }
 }
