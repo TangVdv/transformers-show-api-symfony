@@ -115,13 +115,40 @@ class ScreenTime
         return $this->artefacts;
     }
 
+    public function addArtefact(Artefact $artefact): static
+    {
+        if (!$this->artefacts->contains($artefact)) {
+            $this->artefacts->add($artefact);
+        }
+
+        return $this;
+    }
+
     function getHumans(): ?Collection
     {
         return $this->humans;
     }
 
+    public function addHuman(Human $human): static
+    {
+        if (!$this->humans->contains($human)) {
+            $this->humans->add($human);
+        }
+
+        return $this;
+    }
+
     public function getBots(): ?Collection
     {
         return $this->bots;
+    }
+
+    public function addBot(Bot $bot): static
+    {
+        if (!$this->bots->contains($bot)) {
+            $this->bots->add($bot);
+        }
+
+        return $this;
     }
 }

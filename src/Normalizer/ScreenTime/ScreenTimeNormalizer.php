@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Normalizer;
+namespace App\Normalizer\ScreenTime;
 
 use App\Entity\ScreenTime;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -14,8 +14,7 @@ class ScreenTimeNormalizer implements NormalizerInterface
             "hour" => $object->getHour(),
             "minute" => $object->getMinute(),
             "second" => $object->getSecond(),
-            "total" => $object->getTotal(),
-            "show" => $object->getShow()->getShowName()
+            "total" => $object->getTotal()
         ];
 
         return $json;

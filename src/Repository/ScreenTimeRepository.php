@@ -15,4 +15,24 @@ class ScreenTimeRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, ScreenTime::class);
     }
+
+    public function findOneById($id)
+    {
+        return $this->createQueryBuilder('st')
+                    //ARTEFACT
+                    ->leftJoin('st.artefacts', 'a')
+                    ->addSelect('a')
+                    //BOT
+                    ->leftJoin('st.bots', 'b')
+                    ->addSelect('b')
+                    //HUMAN
+                    ->leftJoin('st.humans', 'h')
+                    ->addSelect('h')
+        
+                    ->where('st.id = :id')
+                    ->setParameter('id', $id)
+                    ->setMaxResults(1)
+                    ->getQuery()
+                    ->getOneOrNullResult();
+    }
 }
